@@ -1,0 +1,181 @@
+/* --- Perusasetukset --- */
+:root {
+    --primary-red: #8b0000;    /* Syvä viininpunainen */
+    --gold: #ffcc00;           /* Kultainen / Aurinko */
+    --bg-cream: #fdf5e6;       /* Kerma / Vanha valkoinen */
+    --white: #ffffff;
+    --text-dark: #2c2c2c;
+    --border-color: #d2b48c;   /* Hiekan sävyinen reuna */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-cream);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+/* --- Yläpalkki (Header) --- */
+.main-header {
+    background-color: var(--primary-red);
+    color: var(--gold);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 4px solid var(--gold);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.avatar-placeholder {
+    width: 40px;
+    height: 40px;
+    background-color: var(--gold);
+    border: 2px solid var(--white);
+    border-radius: 50%;
+}
+
+/* --- Sivuasettelu (Flexbox) --- */
+.app-layout {
+    display: flex;
+    min-height: calc(100vh - 75px); /* Headerin korkeus pois */
+}
+
+/* --- Vasen sarake: Sivupalkki --- */
+.sidebar {
+    width: 320px;
+    background-color: var(--white);
+    border-right: 2px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+}
+
+.search-section {
+    padding: 1.5rem;
+    background-color: #fffaf0;
+}
+
+.search-section input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 25px;
+    outline: none;
+}
+
+.restaurant-nav {
+    overflow-y: auto;
+}
+
+.nav-item {
+    padding: 1.2rem;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.nav-item:hover {
+    background-color: #fff5e1;
+}
+
+.nav-item.active {
+    background-color: #fff5e1;
+    border-left: 8px solid var(--primary-red);
+}
+
+.nav-item h3 {
+    margin-bottom: 4px;
+    color: var(--primary-red);
+}
+
+.fav-icon {
+    font-size: 0.9rem;
+    color: #e67e22;
+    font-weight: bold;
+}
+
+/* --- Oikea sarake: Sisältöalue --- */
+.content {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--primary-red);
+    padding-bottom: 10px;
+}
+
+.view-selector .btn {
+    padding: 8px 20px;
+    border: 2px solid var(--primary-red);
+    background: transparent;
+    color: var(--primary-red);
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 5px;
+    transition: 0.3s;
+}
+
+.btn.active {
+    background-color: var(--primary-red);
+    color: var(--gold);
+}
+
+/* --- Ruokalistakortit (Grid) --- */
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.menu-card {
+    background-color: var(--white);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 4px 4px 0px var(--border-color); /* Tyylikäs kova varjo */
+}
+
+.menu-card h3 {
+    color: var(--primary-red);
+    margin-bottom: 10px;
+}
+
+.description {
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+    color: #555;
+}
+
+.diets {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: var(--primary-red);
+    background-color: #fce4e4;
+    padding: 4px 10px;
+    border-radius: 4px;
+}
