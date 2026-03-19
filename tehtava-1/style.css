@@ -1,0 +1,50 @@
+body    {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    padding: 20px;
+
+}
+
+
+
+a {
+    color: #007BFF;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+
+a:hover {
+    color: #0056b3;
+    
+}
+
+img {
+    border: 3px solid #444;
+    border-radius: 15px;
+    max-width: 100%;
+    height: auto;
+
+}
+
+
+table {
+    padding: 10px;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+
+ul {
+    list-style-type: square;
+    
+}
