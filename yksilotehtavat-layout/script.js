@@ -60,7 +60,7 @@ async function init() {
     await updateDistancesFromGeolocation();
     populateFilters();
     renderRestaurantList(getFilteredRestaurants());
-    loadMenu(AppState.currentRestaurantId);
+    loadMenu(AppState.currentView, AppState.restaurants.find(r => r.id === AppState.currentRestaurantId));
     if (typeof initMap === 'function') {
         initMap();
     }
@@ -104,7 +104,8 @@ function setupEventListeners() {
                 item.classList.toggle('view-btn--active', item === button);
                 item.setAttribute('aria-pressed', String(item === button));
             });
-            loadMenu(AppState.currentRestaurantId);
+            const currentRes = AppState.restaurants.find(r => r.id === AppState.currentRestaurantId);
+            loadMenu(AppState.currentView, currentRes);
         });
     });
 
@@ -134,6 +135,14 @@ async function loadRestaurants() {
         AppState.restaurants = restaurants
             .map(mapRestaurant)
             .filter((restaurant) => restaurant.name);
+            
+        // Asetetaan ensimmäinen ravintola valituksi oletuksena, jos listalla on jotain
+        if (AppState.restaurants.length > 0 && !AppState.currentRestaurantId) {
+            AppState.currentRestaurantId = AppState.restaurants[0].id;
+            if (DOM.restaurantTitle) {
+                DOM.restaurantTitle.textContent = AppState.restaurants[0].name;
+            }
+        }
     } catch (error) {
         console.warn('API failed, using fallback data', error);
         AppState.restaurants = createFallbackRestaurants();
@@ -367,55 +376,97 @@ function selectRestaurant(id) {
     }
 }
 
-function loadMenu(view, restaurant = null) {
+// KORJATTU OMINAISUUS: Hakee datan oikeasta API:sta
+async function loadMenu(view, restaurant = null) {
     if (!DOM.menuContent) {
         return;
     }
 
-    const menus = {
-        daily: [
-            { name: 'Broilerin pihvi', description: 'Paistettu broilerin pihvi ranskalaisten kera', diets: ['Gluteeniton'], price: '5.20 €' },
-            { name: 'Kasvisruoka', description: 'Kasvisateria', diets: ['Vegaaninen'], price: '4.80 €' },
-        ],
-        weekly: [
-            { day: 'Maanantai', meals: ['Lihapullat', 'Kasvis'] },
-            { day: 'Tiistai', meals: ['Kana', 'Porkkana'] },
-        ],
-    };
+    if (!restaurant) {
+        DOM.menuContent.innerHTML = `
+            <div class="empty-state">
+                <p>Valitse ravintola nähdäksesi ruokalistan</p>
+            </div>
+        `;
+        return;
+    }
 
-    const menuItems = menus[view] || menus.daily;
-    const title = restaurant ? restaurant.name : 'Valitse ravintola';
-
+    // Näytetään latausilmoitus haun ajaksi
     DOM.menuContent.innerHTML = `
         <div class="empty-state">
-            <p>${restaurant ? `Ruokalista ravintolalle ${title}` : 'Valitse ravintola nähdäksesi ruokalistan'}</p>
-        </div>
-        <div class="menu-grid">
-            ${menuItems.map((item) => {
-                if (item.day) {
-                    return `
-                        <article class="menu-card week-menu-card">
-                            <h3>${item.day}</h3>
-                            <ul>
-                                ${item.meals.map((meal) => `<li>${meal}</li>`).join('')}
-                            </ul>
-                        </article>
-                    `;
-                }
-
-                return `
-                    <article class="menu-card">
-                        <h3>${item.name}</h3>
-                        <p class="description">${item.description}</p>
-                        <div class="diets">
-                            ${item.diets.map((diet) => `<span class="diet-tag">${diet}</span>`).join('')}
-                        </div>
-                        <p class="menu-price">${item.price}</p>
-                    </article>
-                `;
-            }).join('')}
+            <p>Ladataan ravintolan ${restaurant.name} ruokalistaa...</p>
         </div>
     `;
+
+    try {
+        // Määritetään API-reitti (päivä vai viikko)
+        const endpoint = view === 'daily' ? 'daily' : 'weekly';
+        
+        // Tehdään oikea API-kutsu Metropolian rajapintaan
+        const response = await fetch(`${CONFIG.API_BASE_URL}/api/v1/restaurants/${endpoint}/${restaurant.id}/fi`);
+        
+        if (!response.ok) {
+            throw new Error('Ruokalistan haku epäonnistui');
+        }
+
+        const menuData = await response.json();
+        
+        // Tarkistetaan onko rajapinnassa ylipäätään dataa tälle päivälle/viikolle
+        if (!menuData || (Array.isArray(menuData) && menuData.length === 0) || menuData.courses?.length === 0) {
+            DOM.menuContent.innerHTML = `
+                <div class="empty-state">
+                    <p>Ei ruokalistaa saatavilla valitulle ajalle. Ravintola saattaa olla kiinni.</p>
+                </div>
+            `;
+            return;
+        }
+
+        // Rakennetaan HTML-sisältö dynaamisesti
+        let htmlContent = '<div class="menu-grid">';
+
+        if (view === 'daily') {
+            const courses = Array.isArray(menuData) ? menuData : (menuData.courses || []);
+            
+            htmlContent += courses.map(item => `
+                <article class="menu-card">
+                    <h3>${item.name || item.title || 'Annos'}</h3>
+                    ${item.description ? `<p class="description">${item.description}</p>` : ''}
+                    <div class="diets">
+                        ${(item.diets || []).map(diet => `<span class="diet-tag">${diet}</span>`).join('')}
+                    </div>
+                    ${item.price ? `<p class="menu-price">${item.price}</p>` : ''}
+                </article>
+            `).join('');
+
+        } else if (view === 'weekly') {
+            const days = Array.isArray(menuData) ? menuData : (menuData.days || []);
+            
+            htmlContent += days.map(day => `
+                <article class="menu-card week-menu-card">
+                    <h3>${day.date || day.dayOfWeek || 'Päivä'}</h3>
+                    <ul>
+                        ${(day.courses || []).map(course => `
+                            <li>
+                                <strong>${course.name || course.title}</strong>
+                                ${(course.diets && course.diets.length > 0) ? `<br><span class="diet-tag" style="font-size: 0.8em; margin-top: 5px; display: inline-block;">${course.diets.join(', ')}</span>` : ''}
+                            </li>
+                        `).join('')}
+                    </ul>
+                </article>
+            `).join('');
+        }
+
+        htmlContent += '</div>';
+        DOM.menuContent.innerHTML = htmlContent;
+
+    } catch (error) {
+        console.error("Virhe ladattaessa ruokalistaa:", error);
+        DOM.menuContent.innerHTML = `
+            <div class="empty-state">
+                <p>Ruokalistan lataus epäonnistui. Tarkista verkkoyhteys.</p>
+            </div>
+        `;
+    }
 }
 
 function openAuthModal() {
