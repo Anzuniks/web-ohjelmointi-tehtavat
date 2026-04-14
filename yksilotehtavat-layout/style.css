@@ -1,181 +1,1007 @@
-/* --- Perusasetukset --- */
+/**
+ * KampusRuoka - Päätyylitiedosto
+ * 
+ * Väripaletti:
+ * - Pääväri: Syvä sininen (#2c3e50)
+ * - Korostusväri: Vibrantti oranssi (#e67e22)
+ * - Taustan väri: Vaalea harmaa (#ecf0f1)
+ * - Tekstin väri: Tumma harmaa (#2c2c2c)
+ */
+
+/* ============================================================================
+   PERUSASETUKSET JA CSS-MUUTTUJAT
+   ========================================================================== */
+
 :root {
-    --primary-red: #8b0000;    /* Syvä viininpunainen */
-    --gold: #ffcc00;           /* Kultainen / Aurinko */
-    --bg-cream: #fdf5e6;       /* Kerma / Vanha valkoinen */
-    --white: #ffffff;
-    --text-dark: #2c2c2c;
-    --border-color: #d2b48c;   /* Hiekan sävyinen reuna */
+    /* Värimuuttujat */
+    --color-primary: #2c3e50;      /* Pääväri - tumma sininen */
+    --color-accent: #e67e22;       /* Korostusväri - oranssi */
+    --color-success: #27ae60;      /* Onnistuminen - vihreä */
+    --color-error: #e74c3c;        /* Virhe - punainen */
+    --color-warning: #f39c12;      /* Varoitus - keltainen */
+    --color-background: #ecf0f1;   /* Tausta - vaalea harmaa */
+    --color-surface: #ffffff;      /* Pinta - valkoinen */
+    --color-text-primary: #2c2c2c; /* Teksti - tumma harmaa */
+    --color-text-secondary: #7f8c8d; /* Toisijaraiset teksti - harmaa */
+    --color-border: #bdc3c7;       /* Rajat - kevyt harmaa */
+
+    /* Typografia */
+    --font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-size-base: 16px;
+    --font-size-sm: 0.875rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.5rem;
+    --font-size-2xl: 2rem;
+
+    /* Värit mukaisesti pituuden mukaisesti */
+    --line-height-tight: 1.3;
+    --line-height-normal: 1.6;
+    --line-height-relaxed: 1.8;
+
+    /* Välit ja mittaukset */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+
+    /* Varjot */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15);
+
+    /* Siirtymät */
+    --transition-fast: 150ms ease-out;
+    --transition-normal: 250ms ease-out;
+    --transition-slow: 350ms ease-out;
+
+    /* Breakpoints */
+    --breakpoint-sm: 640px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 1024px;
+    --breakpoint-xl: 1280px;
 }
+
+/* ============================================================================
+   YLEISET TYYLIT
+   ========================================================================== */
 
 * {
     box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--bg-cream);
-    color: var(--text-dark);
-    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
 }
 
-/* --- Yläpalkki (Header) --- */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: var(--line-height-tight);
+    margin-top: 0;
+}
+
+h1 {
+    font-size: var(--font-size-2xl);
+}
+
+h2 {
+    font-size: var(--font-size-xl);
+}
+
+h3 {
+    font-size: var(--font-size-lg);
+}
+
+p {
+    margin: 0;
+}
+
+a {
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+a:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+input, select, textarea {
+    font-family: inherit;
+    font-size: inherit;
+}
+
+/* ============================================================================
+   NAPPIT (BUTTONS)
+   ========================================================================== */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 2px solid transparent;
+    border-radius: 6px;
+    font-size: var(--font-size-base);
+    font-weight: 500;
+    background-color: var(--color-primary);
+    color: var(--color-surface);
+    transition: all var(--transition-fast);
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: var(--color-accent);
+    box-shadow: var(--shadow-md);
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn:focus {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
+.btn--header {
+    background-color: var(--color-accent);
+}
+
+.btn--secondary {
+    background-color: var(--color-surface);
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+}
+
+.btn--secondary:hover {
+    background-color: var(--color-background);
+}
+
+/* ============================================================================
+   YLÄPALKKI (HEADER)
+   ========================================================================== */
+
 .main-header {
-    background-color: var(--primary-red);
-    color: var(--gold);
-    padding: 1rem 2rem;
+    background-color: var(--color-primary);
+    color: var(--color-surface);
+    padding: var(--spacing-md) var(--spacing-xl);
+    box-shadow: var(--shadow-md);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 4px solid var(--gold);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
 }
 
 .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    margin: 0;
 }
 
-.user-profile {
+.tagline {
+    font-size: var(--font-size-sm);
+    opacity: 0.9;
+    margin: 0;
+}
+
+.user-section {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: var(--spacing-md);
 }
 
-.avatar-placeholder {
-    width: 40px;
-    height: 40px;
-    background-color: var(--gold);
-    border: 2px solid var(--white);
-    border-radius: 50%;
-}
-
-/* --- Sivuasettelu (Flexbox) --- */
-.app-layout {
+.header-nav {
     display: flex;
-    min-height: calc(100vh - 75px); /* Headerin korkeus pois */
+    gap: var(--spacing-md);
 }
 
-/* --- Vasen sarake: Sivupalkki --- */
+/* ============================================================================
+   PÄÄSISÄLTÖ ASETTELU
+   ========================================================================== */
+
+.app-container {
+    display: flex;
+    min-height: calc(100vh - 76px);
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+/* ============================================================================
+   SIVUPALKKI (SIDEBAR)
+   ========================================================================== */
+
 .sidebar {
     width: 320px;
-    background-color: var(--white);
-    border-right: 2px solid var(--border-color);
+    background-color: var(--color-surface);
+    border-right: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-sm);
+    overflow-y: auto;
+}
+
+.sidebar-header {
+    padding: var(--spacing-lg) var(--spacing-md);
+    border-bottom: 2px solid var(--color-accent);
+}
+
+.sidebar-title {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    margin: 0;
+    color: var(--color-primary);
+}
+
+.search-wrapper {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.search-input {
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    font-size: var(--font-size-sm);
+    background-color: var(--color-background);
+    transition: border-color var(--transition-fast);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1);
+}
+
+/* --- Suodattimet --- */
+
+.filters {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-md);
+}
+
+.filter-group:last-child {
+    margin-bottom: 0;
+}
+
+.filter-label {
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--color-text-secondary);
+}
+
+.filter-select {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    transition: border-color var(--transition-fast);
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1);
+}
+
+/* --- Ravintolalista --- */
+
+.restaurant-list {
+    flex: 1;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
 }
 
-.search-section {
-    padding: 1.5rem;
-    background-color: #fffaf0;
-}
-
-.search-section input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid var(--border-color);
-    border-radius: 25px;
-    outline: none;
-}
-
-.restaurant-nav {
-    overflow-y: auto;
-}
-
-.nav-item {
-    padding: 1.2rem;
-    border-bottom: 1px solid #eee;
+.restaurant-item {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--color-border);
     cursor: pointer;
-    transition: 0.2s;
+    transition: all var(--transition-fast);
+    user-select: none;
 }
 
-.nav-item:hover {
-    background-color: #fff5e1;
+.restaurant-item:hover {
+    background-color: var(--color-background);
 }
 
-.nav-item.active {
-    background-color: #fff5e1;
-    border-left: 8px solid var(--primary-red);
+.restaurant-item--active {
+    background-color: rgba(230, 126, 34, 0.1);
+    border-left: 4px solid var(--color-accent);
+    padding-left: calc(var(--spacing-md) - 4px);
 }
 
-.nav-item h3 {
-    margin-bottom: 4px;
-    color: var(--primary-red);
+.restaurant-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-sm);
 }
 
-.fav-icon {
-    font-size: 0.9rem;
-    color: #e67e22;
-    font-weight: bold;
+.restaurant-name {
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: var(--color-primary);
+    margin: 0;
 }
 
-/* --- Oikea sarake: Sisältöalue --- */
-.content {
+.restaurant-rating {
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    white-space: nowrap;
+    color: var(--color-accent);
+}
+
+.restaurant-details {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.restaurant-details p {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+}
+
+.restaurant-city {
+    font-weight: 500;
+}
+
+.restaurant-distance {
+    font-size: var(--font-size-sm);
+    color: var(--color-accent);
+}
+
+/* ============================================================================
+   PÄÄSISÄLTÖ (MAIN CONTENT)
+   ========================================================================== */
+
+.main-content {
     flex: 1;
-    padding: 2rem;
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-background);
 }
 
 .content-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
-    border-bottom: 2px solid var(--primary-red);
-    padding-bottom: 10px;
+    padding: var(--spacing-xl);
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
 }
 
-.view-selector .btn {
-    padding: 8px 20px;
-    border: 2px solid var(--primary-red);
-    background: transparent;
-    color: var(--primary-red);
+.content-title {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: var(--color-primary);
+    margin: 0;
+}
+
+.view-controls {
+    display: flex;
+    gap: var(--spacing-md);
+}
+
+.view-btn {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border: 2px solid var(--color-border);
+    border-radius: 6px;
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+    font-weight: 500;
     cursor: pointer;
-    font-weight: bold;
-    margin-left: 5px;
-    transition: 0.3s;
+    transition: all var(--transition-fast);
 }
 
-.btn.active {
-    background-color: var(--primary-red);
-    color: var(--gold);
+.view-btn:hover {
+    border-color: var(--color-accent);
+    background-color: var(--color-background);
 }
 
-/* --- Ruokalistakortit (Grid) --- */
-.menu-grid {
+.view-btn--active {
+    background-color: var(--color-accent);
+    color: var(--color-surface);
+    border-color: var(--color-accent);
+}
+
+/* --- Ruokalistin säiliö --- */
+
+.menu-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-xl);
+}
+
+.menu-content {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
+    gap: var(--spacing-lg);
 }
+
+/* ============================================================================
+   RUOKALISTAKORTTI (MENU CARD)
+   ========================================================================== */
 
 .menu-card {
-    background-color: var(--white);
-    padding: 1.5rem;
-    border-radius: 12px;
-    border: 1px solid var(--border-color);
-    box-shadow: 4px 4px 0px var(--border-color); /* Tyylikäs kova varjo */
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-fast);
 }
 
-.menu-card h3 {
-    color: var(--primary-red);
-    margin-bottom: 10px;
+.menu-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+    border-color: var(--color-accent);
 }
 
-.description {
-    font-size: 0.95rem;
-    margin-bottom: 15px;
-    color: #555;
+.menu-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-md);
+    gap: var(--spacing-md);
 }
 
-.diets {
+.menu-card-title {
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: var(--color-primary);
+    margin: 0;
+}
+
+.menu-card-price {
+    font-size: var(--font-size-base);
+    font-weight: 700;
+    color: var(--color-accent);
+    white-space: nowrap;
+}
+
+.menu-card-description {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+    margin-bottom: var(--spacing-md);
+}
+
+.menu-diets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+}
+
+.diet-tag {
     display: inline-block;
-    font-size: 0.8rem;
-    font-weight: bold;
-    color: var(--primary-red);
-    background-color: #fce4e4;
-    padding: 4px 10px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background-color: var(--color-background);
+    color: var(--color-text-secondary);
     border-radius: 4px;
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+}
+
+/* ============================================================================
+   VIIKKORUOKALISTA
+   ========================================================================== */
+
+.week-menu-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-fast);
+}
+
+.week-menu-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-accent);
+}
+
+.week-menu-day {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--color-accent);
+    margin: 0 0 var(--spacing-md) 0;
+    padding-bottom: var(--spacing-md);
+    border-bottom: 2px solid var(--color-border);
+}
+
+.week-menu-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.week-menu-item {
+    padding: var(--spacing-sm) 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.week-menu-item:last-child {
+    border-bottom: none;
+}
+
+/* ============================================================================
+   TYHJÄ TILA (EMPTY STATE)
+   ========================================================================== */
+
+.empty-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-lg);
+    text-align: center;
+    padding: var(--spacing-xl);
+}
+
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xl);
+    color: var(--color-text-secondary);
+}
+
+/* ============================================================================
+   NOTIFICATIONS
+   ========================================================================== */
+
+.notification {
+    position: fixed;
+    top: 90px;
+    right: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    border-radius: 6px;
+    box-shadow: var(--shadow-lg);
+    z-index: 1000;
+    animation: slideIn var(--transition-normal);
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.notification--error {
+    background-color: var(--color-error);
+    color: var(--color-surface);
+}
+
+.notification--success {
+    background-color: var(--color-success);
+    color: var(--color-surface);
+}
+
+/* ============================================================================
+   MODAALI DIALOGI
+   ========================================================================== */
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    animation: fadeIn var(--transition-fast);
+}
+
+.modal[hidden] {
+    display: none !important;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-content {
+    background-color: var(--color-surface);
+    border-radius: 8px;
+    box-shadow: var(--shadow-lg);
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    padding: var(--spacing-xl);
+}
+
+.modal-close {
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    width: 32px;
+    height: 32px;
+    border: none;
+    background-color: transparent;
+    font-size: var(--font-size-xl);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: color var(--transition-fast);
+}
+
+.modal-close:hover {
+    color: var(--color-primary);
+}
+
+/* ============================================================================
+   RESPONSIIVINEN DESIGN
+   ========================================================================== */
+
+/* Tablet (768px ja alle) */
+@media (max-width: 768px) {
+    .app-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        max-height: 300px;
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    .search-wrapper {
+        min-width: 250px;
+        flex-shrink: 0;
+    }
+
+    .restaurant-list {
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    .restaurant-item {
+        min-width: 250px;
+        flex-shrink: 0;
+    }
+
+    .main-content {
+        flex: 1;
+    }
+
+    .content-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-md);
+    }
+
+    .menu-content {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+
+    .header-content {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        text-align: center;
+    }
+}
+
+/* Puhelin (640px ja alle) */
+@media (max-width: 640px) {
+    :root {
+        --font-size-base: 14px;
+        --spacing-xl: 1rem;
+        --spacing-lg: 0.75rem;
+    }
+
+    .main-header {
+        padding: var(--spacing-md);
+    }
+
+    .logo-section {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    .logo {
+        font-size: var(--font-size-lg);
+    }
+
+    .tagline {
+        display: none;
+    }
+
+    .content-header {
+        padding: var(--spacing-lg);
+    }
+
+    .content-title {
+        font-size: var(--font-size-lg);
+    }
+
+    .menu-container {
+        padding: var(--spacing-lg);
+    }
+
+    .menu-content {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+
+    .menu-card {
+        padding: var(--spacing-md);
+    }
+
+    .sidebar-header {
+        padding: var(--spacing-md);
+    }
+
+    .notification {
+        right: var(--spacing-md);
+        left: var(--spacing-md);
+        width: auto;
+        max-width: none;
+    }
+}
+
+/* ============================================================================
+   TULOSTUS (PRINT)
+   ========================================================================== */
+
+@media print {
+    body {
+        background-color: white;
+    }
+
+    .sidebar,
+    .main-header,
+    .notification,
+    .modal {
+        display: none;
+    }
+
+    .main-content {
+        box-shadow: none;
+    }
+
+    .menu-card {
+        page-break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #ccc;
+        border-left: 8px solid var(--color-accent);
+    }
+}
+
+/* --- Uudet ominaisuudet: kartta, kirjautuminen, suosikit --- */
+.modal[hidden] {
+    display: none !important;
+}
+
+.restaurant-map {
+    width: 100%;
+    min-height: 360px;
+    border-radius: 16px;
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    margin-top: var(--spacing-lg);
+}
+
+.map-canvas {
+    position: relative;
+    width: 100%;
+    height: 360px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: linear-gradient(145deg, #f6f8fb 0%, #edf2f7 100%);
+}
+
+.map-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(to right, rgba(44, 62, 80, 0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(44, 62, 80, 0.08) 1px, transparent 1px);
+    background-size: 32px 32px;
+}
+
+.map-point {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-radius: 999px;
+    border: 2px solid #fff;
+    background: var(--color-primary);
+    box-shadow: 0 4px 10px rgba(44, 62, 80, 0.35);
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+}
+
+.map-point--closest {
+    background: var(--color-success);
+    box-shadow: 0 0 0 6px rgba(39, 174, 96, 0.16), 0 4px 10px rgba(44, 62, 80, 0.35);
+}
+
+.map-point--selected {
+    width: 18px;
+    height: 18px;
+    box-shadow: 0 0 0 8px rgba(230, 126, 34, 0.18), 0 4px 10px rgba(44, 62, 80, 0.35);
+    background: var(--color-accent);
+}
+
+.map-legend {
+    position: absolute;
+    left: 12px;
+    bottom: 10px;
+    padding: 0.3rem 0.6rem;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.88);
+    color: var(--color-text-secondary);
+    font-size: 0.75rem;
+}
+
+.map-empty {
+    margin: 0;
+    padding: 1rem;
+    color: var(--color-text-secondary);
+}
+
+.auth-tab {
+    display: none;
+}
+
+.auth-tab.auth-tab--active {
+    display: block;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+}
+
+.link-btn {
+    background: transparent;
+    border: 0;
+    color: var(--color-accent);
+    cursor: pointer;
+    padding: 0;
+    font: inherit;
+}
+
+.profile-avatar-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: var(--spacing-lg);
+}
+
+.profile-avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--color-accent);
+    background: var(--color-surface);
+}
+
+.favorites-list {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.favorite-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    background: var(--color-surface);
+}
+
+.favorite-btn {
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    border-radius: 999px;
+    width: 2.25rem;
+    height: 2.25rem;
+    cursor: pointer;
+}
+
+.favorite-btn--active {
+    border-color: var(--color-error);
+    background: #fff0ef;
+}
+
+.restaurant-item--active {
+    outline: 2px solid var(--color-accent);
+}
+
+.restaurant-item--closest {
+    border-color: var(--color-success);
+    box-shadow: 0 0 0 2px rgba(39, 174, 96, 0.15);
+}
+
+.closest-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+    border-radius: 999px;
+    background: rgba(39, 174, 96, 0.12);
+    color: var(--color-success);
+    font-size: 0.75rem;
+    font-weight: 700;
 }

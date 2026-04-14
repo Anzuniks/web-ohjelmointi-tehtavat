@@ -3,80 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KampusRuoka - Metropolian opiskelijaravintolat ja ruokalistat">
     <title>KampusRuoka - Metropolia</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
+    <!-- Yläpalkki -->
     <header class="main-header">
-        <div class="logo">☀️ KampusRuoka - Kurdish Flavors</div>
-        <div class="user-profile"> 
-            <span class="username">Anders Nuri</span>
-            <div class="avatar-placeholder"></div>
+        <div class="header-content">
+            <div class="logo-section">
+                <h1 class="logo">🍽️ KampusRuoka</h1>
+                <p class="tagline">Metropolian opiskelijaravintolat</p>
+            </div>
+            <div class="user-section">
+                <nav class="header-nav" id="headerNav">
+                    <button id="loginBtn" class="btn btn--header">Kirjaudu</button>
+                </nav>
+            </div>
         </div>
     </header>
 
-    <div class="app-layout">
+    <!-- Pääsisältö -->
+    <div class="app-container">
+        <!-- Sivupalkki: Ravintolat -->
         <aside class="sidebar">
-            <div class="search-section">
-                <input type="text" placeholder="Hae kampusta tai ravintolaa...">
+            <div class="sidebar-header">
+                <h2 class="sidebar-title">Ravintolat</h2>
             </div>
-            
-            <nav class="restaurant-nav">
-                <div class="nav-item active">
-                    <h3>Sodexo Karamalmi</h3>
-                    <p>Espoo, Metropolia</p>
-                    <span class="fav-icon">4.5 ⭐</span>        
+
+            <div class="search-wrapper">
+                <input 
+                    type="text" 
+                    id="searchRestaurants" 
+                    class="search-input" 
+                    placeholder="Etsi ravintolaa..."
+                    aria-label="Etsi ravintolaa nimellä tai kaupungilla"
+                >
+            </div>
+
+            <div class="filters" id="filterSection">
+                <div class="filter-group">
+                    <label class="filter-label" for="cityFilter">Kaupunki</label>
+                    <select id="cityFilter" class="filter-select" aria-label="Suodata kaupungin mukaan">
+                        <option value="">Kaikki kaupungit</option>
+                    </select>
                 </div>
-                <div class="nav-item">
-                    <h3>Fazer Arabia</h3>
-                    <p>Helsinki, Metropolia</p>
-                    <span class="fav-icon">4.2 ⭐</span>
+                <div class="filter-group">
+                    <label class="filter-label" for="providerFilter">Palveluntarjoaja</label>
+                    <select id="providerFilter" class="filter-select" aria-label="Suodata palveluntarjoajan mukaan">
+                        <option value="">Kaikki palveluntarjoajat</option>
+                    </select>
                 </div>
-                <div class="nav-item">
-                    <h3>Compass Myyrmäki</h3>
-                    <p>Vantaa, Metropolia</p>
-                    <span class="fav-icon">4.0 ⭐</span>
-                </div>
+            </div>
+
+            <nav class="restaurant-list" id="restaurantList" role="navigation">
+                <!-- Ravintolat renderöidään JavaScript:llä -->
+                <div class="loading">Ladataan ravintoloita...</div>
             </nav>
         </aside>
 
-        <main class="content">
+        <!-- Pääsisältö: Ruokailistat -->
+        <main class="main-content">
             <div class="content-header">
-                <h2>Päivän Menu</h2>
-                <div class="view-selector">
-                    <button class="btn active">Päivä</button>
-                    <button class="btn">Viikko</button>
+                <h2 id="restaurantTitle" class="content-title">Valitse ravintola</h2>
+                <div class="view-controls">
+                    <button class="view-btn view-btn--active" data-view="daily" aria-pressed="true">
+                        📅 Päivä
+                    </button>
+                    <button class="view-btn" data-view="weekly" aria-pressed="false">
+                        📆 Viikko
+                    </button>
                 </div>
             </div>
 
-            <div class="menu-grid">
-                <article class="menu-card">
-                    <div class="menu-info">
-                        <h3>Kurdish Kebab</h3>
-                        <p class="description">Perinteinen hiilloksella paistettu karitsanlihavarras, tarjoillaan lavash-leivän ja sumakkisipulin kera.</p>
-                        <span class="diets">Laktoositon, Gluteeniton</span>
-                    </div>   
-                </article>
-
-                <article class="menu-card">
-                    <div class="menu-info">
-                        <h3>Yaprak Sarma</h3>
-                        <p class="description">Riisillä ja yrteillä täytettyjä viiniköynnöksen lehtiä, tarjoillaan paksun jogurtin kanssa.</p>
-                        <span class="diets">Kasvis, Gluteeniton</span>
+            <div id="restaurantMap" class="restaurant-map"></div>
+            <div class="menu-container">
+                <div id="menuContent" class="menu-content">
+                    <div class="empty-state">
+                        <p>Valitse ravintola nähdäksesi ruokalistan</p>
                     </div>
-                </article>
-
-                <article class="menu-card">
-                    <div class="menu-info">
-                        <h3>Riisi Pilaf</h3>
-                        <p class="description">Mausteista sahramiriisiä, paahdettuja pähkinöitä ja granaattiomenaa.</p>
-                        <span class="diets">Vegaaninen, Gluteeniton</span>
-                    </div>
-                </article>
+                </div>
             </div>
         </main>
     </div>
 
+    <!-- Kirjautumis/Rekisteröinti Modal -->
+    <div id="authModal" class="modal" hidden>
+        <div class="modal-content">
+            <button class="modal-close" id="authModalClose" aria-label="Sulje ikkuna">&times;</button>
+            <div id="authModalBody">
+                <!-- Kirjautuminen (Login Tab) -->
+                <div id="loginTab" class="auth-tab auth-tab--active">
+                    <h2>Kirjaudu sisään</h2>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="loginEmail">Sähköposti:</label>
+                            <input type="email" id="loginEmail" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Salasana:</label>
+                            <input type="password" id="loginPassword" name="password" required>
+                        </div>
+                        <button type="submit" class="btn btn--primary">Kirjaudu</button>
+                    </form>
+                    <p class="auth-switch">Ei vielä tunnusta? <button id="switchToRegister" class="link-btn">Rekisteröidy</button></p>
+                </div>
+
+                <!-- Rekisteröityminen (Register Tab) -->
+                <div id="registerTab" class="auth-tab">
+                    <h2>Rekisteröidy</h2>
+                    <form id="registerForm">
+                        <div class="form-group">
+                            <label for="registerName">Nimi:</label>
+                            <input type="text" id="registerName" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerEmail">Sähköposti:</label>
+                            <input type="email" id="registerEmail" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerPassword">Salasana:</label>
+                            <input type="password" id="registerPassword" name="password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerPassword2">Salasana uudelleen:</label>
+                            <input type="password" id="registerPassword2" name="password2" required>
+                        </div>
+                        <button type="submit" class="btn btn--primary">Rekisteröidy</button>
+                    </form>
+                    <p class="auth-switch">Minulla on jo tunnus. <button id="switchToLogin" class="link-btn">Kirjaudu</button></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profiilin hallinta Modal -->
+    <div id="profileModal" class="modal" hidden>
+        <div class="modal-content">
+            <button class="modal-close" id="profileModalClose" aria-label="Sulje ikkuna">&times;</button>
+            <div id="profileModalBody">
+                <h2>Oma profiili</h2>
+                <div class="profile-avatar-section">
+                    <img id="profileAvatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23e67e22'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M12 14c-6 0-8 3-8 3v6h16v-6s-2-3-8-3z'/%3E%3C/svg%3E" alt="Profiilikuva" class="profile-avatar">
+                    <label for="avatarUpload" class="btn btn--secondary">Vaihda kuva</label>
+                    <input type="file" id="avatarUpload" accept="image/*" hidden>
+                </div>
+                <form id="profileForm">
+                    <div class="form-group">
+                        <label for="profileName">Nimi:</label>
+                        <input type="text" id="profileName" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="profileEmail">Sähköposti:</label>
+                        <input type="email" id="profileEmail" name="email" required disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="profilePhone">Puhelin:</label>
+                        <input type="tel" id="profilePhone" name="phone">
+                    </div>
+                    <button type="submit" class="btn btn--primary">Tallenna muutokset</button>
+                </form>
+                <button id="logoutBtn" class="btn btn--secondary" style="margin-top: 1rem; width: 100%;">Kirjaudu ulos</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Suosikkiravintolat Modal -->
+    <div id="favoritesModal" class="modal" hidden>
+        <div class="modal-content">
+            <button class="modal-close" id="favoritesModalClose" aria-label="Sulje ikkuna">&times;</button>
+            <div id="favoritesModalBody">
+                <h2>❤️ Suosikkiravintolani</h2>
+                <div id="favoritesList" class="favorites-list">
+                    <p class="empty-state">Ei vielä suosikkiravintaloita. Lisää niitä painamalla ⭐ -painiketta!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Yleinen Modal dialogit -->
+    <div id="modal" class="modal" hidden>
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose" aria-label="Sulje ikkuna">&times;</button>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- Virheilmoitus -->
+    <div id="errorNotification" class="notification notification--error" hidden role="alert"></div>
+    <div id="successNotification" class="notification notification--success" hidden role="alert"></div>
+
+    <script src="auth.js"></script>
+    <script src="map.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
+
+
+
